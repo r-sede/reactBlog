@@ -3,9 +3,7 @@ import React, { Component } from 'react';
 
 class BlogSidebar extends Component {
 
-	constructor(props) {
-		super(props);
-	}
+
 
 	render() {
 		const socialsLinks = this.props.socialsLinks;

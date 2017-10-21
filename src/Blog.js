@@ -6,6 +6,18 @@ import BlogSidebar from './components/BlogSidebar';
 import BlogFooter from './components/BlogFooter';
 import './blog.css';
 import $ from 'jquery';
+import Echo from 'laravel-echo';
+import Pusher from 'pusher-js';
+
+
+// window.Pusher = require('pusher-js');
+
+// window.Echo = new Echo({
+//     broadcaster: 'pusher',
+//     key: '7bb6fff34ca371096fe7',
+//     cluster: 'eu',
+//     encrypted: true
+// });
 
 class Blog extends Component {
 
@@ -62,6 +74,26 @@ class Blog extends Component {
 				}
 			}
 		});
+
+		// Enable pusher logging - don't include this in production
+		Pusher.logToConsole = true;
+		let token = document.head.querySelector('meta[name="csrf-token"]');
+		var pusher = new Pusher('7bb6fff34ca371096fe7', {
+		  cluster: 'eu',
+		  encrypted: true,
+		  auth: {
+		  	params: {
+		  		CSRFToken: token
+		  	}
+		  }
+		});
+
+		var channel = pusher.subscribe('my-channel');
+
+		channel.bind('UpdateBlogEvent', function(data) {
+		  alert(data.message);
+		});
+
 	}
 
 	render() {
