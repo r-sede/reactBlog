@@ -6,7 +6,7 @@ import BlogSidebar from './components/BlogSidebar';
 import BlogFooter from './components/BlogFooter';
 import './blog.css';
 import $ from 'jquery';
-import Echo from 'laravel-echo';
+// import Echo from 'laravel-echo';
 import Pusher from 'pusher-js';
 
 
@@ -36,6 +36,11 @@ class Blog extends Component {
 
 
 		this.state = { articles: [], archives: [] };
+		
+
+	}
+
+	componentDidMount() {
 		let self = this;
 		$.ajax({
 			url: 'http://127.0.0.1:8000/api/articles',
@@ -75,25 +80,28 @@ class Blog extends Component {
 			}
 		});
 
+
+		
 		// Enable pusher logging - don't include this in production
 		Pusher.logToConsole = true;
-		let token = document.head.querySelector('meta[name="csrf-token"]');
+		// let token = document.head.querySelector('meta[name="csrf-token"]');
 		var pusher = new Pusher('7bb6fff34ca371096fe7', {
 		  cluster: 'eu',
-		  encrypted: true,
-		  auth: {
-		  	params: {
-		  		CSRFToken: token
-		  	}
-		  }
+		  encrypted: true
 		});
+		
 
-		var channel = pusher.subscribe('my-channel');
-
-		channel.bind('UpdateBlogEvent', function(data) {
-		  alert(data.message);
-		});
-
+		var channel = pusher.subscribe('my_channel');
+		
+			channel.bind('App\\Events\\UpdateBlogEvent', function(data) {
+				console.log(data.article);
+				self.state.articles.push ({
+					postTitle: data.article.articleTitle,
+					postMeta: data.article.created_at,
+					postBody: data.article.articleBody
+				})
+				self.setState({article: self.state.articles});
+		});		
 	}
 
 	render() {

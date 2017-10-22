@@ -8,8 +8,8 @@ class BlogSidebar extends Component {
 	render() {
 		const socialsLinks = this.props.socialsLinks;
 		const archives = this.props.archives;
-		const listItems = archives.map((number) =>
-		  <li><a href='#'>{number}</a></li>
+		const listItems = archives.map((number, i) =>
+		  <li key='i'><a  href='#'>{number}</a></li>
 		);
 		return (
 			<div className='col-sm-3 offset-sm-1 blog-sidebar'>
