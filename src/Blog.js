@@ -49,13 +49,15 @@ class Blog extends Component {
 
 			success: function (data) {
 				if (data.length > 0) {
+					console.log(data);
 					let articles = [];
 					for (let i = 0; i < data.length; i++) {
 						let art = data[i];
 						articles.push({
 							postTitle: art.articleTitle,
 							postMeta: art.created_at,
-							postBody: art.articleBody
+							postBody: art.articleBody,
+							postAuthor: art.author.name
 						});
 					}
 					self.setState({ articles: articles });
@@ -95,10 +97,11 @@ class Blog extends Component {
 		
 			channel.bind('App\\Events\\UpdateBlogEvent', function(data) {
 				console.log(data.article);
-				self.state.articles.push ({
+				self.state.articles.unshift ({
 					postTitle: data.article.articleTitle,
 					postMeta: data.article.created_at,
-					postBody: data.article.articleBody
+					postBody: data.article.articleBody,
+					postAuthor: data.authorName
 				})
 				self.setState({article: self.state.articles});
 		});		

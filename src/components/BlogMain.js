@@ -16,14 +16,14 @@ class BlogMain extends Component {
 
 		const articleToDraw = [];
 		let upBounds = Math.min(articles.length, this.state.cursor + this.state.maxArticle);
-		console.log(upBounds);
+		// console.log(upBounds);
 		for (let i = this.state.cursor; i < upBounds; i++) {
 			let dangerHtml = { __html: articles[i].postBody };
 			articleToDraw.push(
 				<div key={'blogPost' + i} className='blog-post'>
 					<h2 key={'blogPostTitle' + i} className='blog-post-title'>{articles[i].postTitle}</h2>
 					<p key={'blogPostMeta' + i} className='blog-post-meta'>{articles[i].postMeta}
-						<a href='#'> Mark</a>
+						<a href='#'> {articles[i].postAuthor}</a>
 					</p>
 					<div dangerouslySetInnerHTML={dangerHtml}/>
 				</div>
